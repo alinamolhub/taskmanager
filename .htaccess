@@ -1,0 +1,4 @@
+#Laravel Rewrite to strip /public from the URL
+RewriteEngine On
+RewriteCond %{REQUEST_URI} !^/public/
+RewriteRule ^(.*)$ /public/$1 [L,QSA]

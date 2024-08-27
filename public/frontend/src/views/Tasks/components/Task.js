@@ -32,10 +32,7 @@ const Task = (task) => {
    [timerOn,setTimerOn] = useState(task.isTimerOn),
     border = classNames("mb-3",{ [`border-${getColorByColumn(task.column)}`]: true }),
       text = classNames({ [`${getColorByColumn(task.column)}`]: true });
-  
 
-     
-   
   return (<taskTimerContext.Provider value={{seconds,setSeconds,timerOn,setTimerOn}}>
     {showDetails && <TaskDetails task={task} setShowDetails={setShowDetails} />}
     <CCard color="white" textColor={text} className={border}>
@@ -62,7 +59,7 @@ const Options = ({task})=>{
   const {destroy,setTasks,tasks} = useContext(taskContext);
   const destroyTask = async () => {
     await destroy(task.id);
-    setTasks(tasks.filter((taskEl) => taskEl.id !== task.id));
+    setTasks({type:"destroy",id:task.id});
   }
   return <>{showForm && <TaskForm setShowForm={setShowForm} task={task} />}
   {showConfirm && <ConfirmModal setShow={setShowConfirm} onConfirm={() => { destroyTask() }} />}<CDropdown>

@@ -2,17 +2,14 @@ import React, { useState, useEffect, useContext, useRef, memo } from 'react'
 import { HTML5Backend } from 'react-dnd-html5-backend'
 import { DndProvider, useDrag, useDrop } from 'react-dnd'
 import {
-
   CRow,
   CSpinner,
   CCard,
-
   CCardHeader,
-  CCol,
-
-
+  CCol
 } from '@coreui/react'
-
+import { Task } from '../views/Tasks/components/Task'
+import { v4 as uuidv4 } from 'uuid';
 
 const KanbanContext = React.createContext();
 
@@ -42,10 +39,10 @@ const KanbanElement = ({ kitem, index }) => {
     }
   });
   dragRef(dropRef(ref));
-  if(kitem.empty)
+  /*if(kitem.empty)
     return <CCard color="white">
     <CCardHeader className='d-flex align-items-center'><CSpinner color="primary" variant="grow" /></CCardHeader>
-  </CCard>;
+  </CCard>;*/
   const content = cardContent(kitem);
   return (<div ref={ref}>{content}</div>);
 }
@@ -64,17 +61,10 @@ const getReplacedDataSet = (item,column,currentDataSet)=>{
       droppedOnIndex--;
     newData.splice(droppedOnIndex, 0, newData.splice(droppedIndex, 1)[0]);
   }
-  else{
 
-  }
-  newData.filter((task)=>
-    task.id !== item.id
-  ).push(item);
-  
-  return newData.map((kitem, index) => { kitem.order = index; return kitem; });
 }
 
-const KanbanColumn = ({ column, items }) => {
+const KanbanColumn = memo(({ column, items }) => {
   const { ds, onReplace, setDs } = useContext(KanbanContext);
   const [loading,setLoading] = useState(false); 
   const ref = useRef(null)
@@ -83,37 +73,39 @@ const KanbanColumn = ({ column, items }) => {
     accept: "box",
     drop:async (item) => {
 
-      let upData = ds;
+      
       if(item.column !==column ){
 
-      setDs(ds.filter((task)=>
-        task.id !== item.id
-      ));
+      setDs({type:"destroy","id":item.id});
         
-      setLoading({item:{...item,...{column:column}}});
-      upData = await onReplace(item, column);
+      setLoading({
+        droppedOnIndex:items.findIndex((kitem) => kitem.id === item.droppedOn),
+        item:{...item,...{empty:true,column:column}}
+      });
+      const updateTask = await onReplace(item, column);
       setLoading(false);
+      setDs({type:"add","newTask":{...updateTask,newKey:true}});
       
       }
-      setDs(getReplacedDataSet(item,column,upData));
-
-    },
-    hover: (item, monitor) => {
+      
 
     }
   });
   dropRef(ref); 
   let renderItems = [...items];
   if(loading){
-      renderItems.push(loading.item);
+      if(loading.droppedOnIndex > 0)
+      renderItems = [...renderItems.slice(0,loading.droppedOnIndex+1),loading.item,...renderItems.slice(loading.droppedOnIndex+1)];
+    else
+    renderItems = [...items,loading.item];
   }
     
   return <CCol ref={ref} className='p-3 bg-light text-center'>
     
-    {renderItems.map((item, index) => <KanbanElement index={index} key={item.id} kitem={item} />)}
+    {renderItems.map((item, index) => { const key =item.newKey?uuidv4():item.id;  return <KanbanElement index={index} key={key} kitem={item} />})}
   </CCol>
-};
-const KanbanGroup = ({ group,groupFilter }) => {
+});
+const KanbanGroup = memo(({ group,groupFilter }) => {
   const { ds, groupName, cols, columnField } = useContext(KanbanContext);
   const getColIitems = (colId, group) => {
 
@@ -136,7 +128,7 @@ const KanbanGroup = ({ group,groupFilter }) => {
     </>;
   else
     return <></>;
-}
+})
 
 const KanbanBoard = memo(({ groupsList = [], groupFilter =()=>true, groupName=()=>"", dragedIf, onReplace, columnField, cols, cardContent, data, setData}) => {
   return (

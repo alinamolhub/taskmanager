@@ -37,12 +37,15 @@ class TaskController extends Controller
         if( $request->has("user_id")){
             $task->assignTo($request->input("user_id"));
         }
-        if( $request->has("timer_start")){
-            $task->timerInfo()->insert(["tasks_id"=>$task->id, "user_id" =>auth()->user()->id,"time_start" => now()]);
+        if($task->assignTo(auth()->user()->id)){
+            if( $request->has("timer_start")){
+                $task->timerInfo()->insert(["tasks_id"=>$task->id, "user_id" =>auth()->user()->id,"time_start" => now()]);
+            }
+            if( $request->has("timer_end") || ( $task->isTimerOn() && $request->has("column") && $request->input("column") === Done) ){
+                $task->timerOff();
+            }
         }
-        if( $request->has("timer_end") || ( $task->isTimerOn() && $request->has("column") && $request->input("column") === Done) ){
-            $task->timerOff();
-        }
+
         $task->load(["user","creator"]);
         return new TaskResource($task->load("user"));
     }

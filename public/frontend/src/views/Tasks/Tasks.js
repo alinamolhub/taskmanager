@@ -1,4 +1,4 @@
-import React,{useState,useContext,createContext, useEffect,useMemo ,useCallback} from 'react'
+import React,{useState,useContext,useReducer, useEffect,useMemo ,useCallback} from 'react'
 import { KanbanBoard } from '../../components/KanbanBoard'
 import { useDataSource } from '../../hooks/useDataSource'
 import {
@@ -23,34 +23,55 @@ import { useAuthContext } from '../../contexts/auth-context'
 import {BrowserView, MobileView} from 'react-device-detect';
 
 import { UserDetails } from '../../components/userDetail'
-
+const reducer = (state,action)=>{
+    switch(action.type){
+      case "init":{
+        return action.collection;
+      }
+      case "add":{
+        console.log(action.newTask);
+        return [...state,action.newTask];
+      }
+      case "update":{
+        const updatedIndex = state.findIndex((taskEl)=>taskEl.id === action.updateTask.id);
+        return [...state.slice(0,updatedIndex),action.updateTask,...state.slice(updatedIndex+1)];
+      }
+      case "destroy":{
+        return state.filter((taskEl) => taskEl.id !== action.id)
+      }
+      
+    }
+}
 const Tasks = () => {
   const {user}  = useAuthContext();
   let params = useParams();
   const {data:project,loading,setLoading} = useDataSource("projects/"+params.projectId);
   const {create,update,destroy} = useDataSource("projects/"+params.projectId+"/tasks",false);
   const [showForm, setShowForm] = useState(false);
-  const [tasks,setTasks] = useState([]);
+  const [tasks,setTasks] = useReducer(reducer,[]);
   const [showUserDetails, setShowUserDetails] = useState({ open: false, userId: 0 });
   const openDet = (id)=>setShowUserDetails({open:true,userId:id});
   useEffect(()=>{
     if(!loading && !project.error){
-      setTasks([...project.tasks]);
+      setTasks({type:"init",collection:[...project.tasks]});
     }
     
   },[loading]);
+  useEffect(()=>{
+    console.log(tasks);
+    
+  },[tasks]);
 
   const onReplace = useCallback(async(task,column) => {
     
-    const updatedTaskOb = await update(task.id,{column:column});
-    const updatedIndex = tasks.findIndex((taskEl)=>taskEl.id === task.id);
-    return [...tasks.slice(0,updatedIndex),updatedTaskOb,...tasks.slice(updatedIndex+1)];
-  },[tasks]);
+    const updated = await update(task.id,{column:column});
+    return updated;
+  },[]);
   const dragedIf = useCallback((task) => task.canUpdate,[]);
 
 
   const groupFilter = useCallback((task,group) =>{
-    return task.user[0] && task.user[0].id == group.id
+    return task && task.user && task.user[0] && task.user[0].id == group.id
   },[]);
   const groupName = useCallback((group) =>{
     return group.id===user.id?"My Tasks":group.name;
@@ -88,7 +109,6 @@ const Tasks = () => {
           <MobileView>
           <TasksList/>
           </MobileView>
-          
           </CCardBody>
         </CCard>
       </CCol>

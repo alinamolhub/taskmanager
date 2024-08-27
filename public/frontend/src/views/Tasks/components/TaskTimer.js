@@ -17,8 +17,7 @@ const TaskTimer = ({task}) => {
 
         if( !timerStatus ){
             const updatedTaskOb = await update(task.id,{timer_end:new Date()});
-            const updatedIndex = tasks.findIndex((taskEl)=>taskEl.id === task.id);
-            setTasks( [...tasks.slice(0,updatedIndex),updatedTaskOb,...tasks.slice(updatedIndex+1)] );
+            setTasks({type:"update",updateTask:updatedTaskOb});
         }  
         else
             await update(task.id,{timer_start:new Date()});
@@ -29,7 +28,8 @@ const TaskTimer = ({task}) => {
         if(timerOn)
             setTimeout(()=>setSeconds(seconds+1),1000);
       }, [timerOn,seconds]);
-    
+    if(task.empty) 
+        return <>---</>
     return <><div className="me-1"><CIcon  role="button" onClick={buttonHandler} width={20} height={20} icon={timerOn?cilMediaPause:cilCaretRight} customClassName="nav-icon" /></div>
         <div className='mt-1'>{convertSeconds(seconds)}</div></>;
 }

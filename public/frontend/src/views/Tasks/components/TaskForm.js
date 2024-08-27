@@ -16,14 +16,13 @@ const TaskForm = ({ setShowForm, task }) => {
   const {tasks,project,create,setTasks,update} = useContext(taskContext);
   const createTask = async ()=>{
     const newTask = await create({ description: description,user_id:assignuser });
-    setTasks([...tasks,newTask]);
+    setTasks({type:"add",newTask:newTask});
 
   }
   const updateTask = async ()=>{
 
     const updatedTaskOb = await update(task.id,{  description: description,user_id:assignuser });
-    const updatedIndex = tasks.findIndex((taskEl)=>taskEl.id === task.id);
-    setTasks( [...tasks.slice(0,updatedIndex),updatedTaskOb,...tasks.slice(updatedIndex+1)] );
+    setTasks({type:"update",updateTask:updatedTaskOb});
 
   }
 

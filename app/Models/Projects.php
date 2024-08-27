@@ -17,7 +17,7 @@ class Projects extends Model
     protected $fillable = ['name','user_id'];
     public function tasks(): HasMany
     {
-        return $this->hasMany(Tasks::class);
+        return $this->hasMany(Tasks::class)->orderBy('order', 'asc');;
     }
     public function users(): BelongsToMany
     {

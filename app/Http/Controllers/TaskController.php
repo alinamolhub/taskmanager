@@ -49,4 +49,6 @@ class TaskController extends Controller
     public function destroy(Request $request,Projects $project,Tasks $task){
         $task->delete();
     }
+
+    
 }

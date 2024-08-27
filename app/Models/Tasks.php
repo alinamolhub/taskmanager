@@ -22,7 +22,8 @@ class Tasks extends Model
         'description',
         'projects_id',
         'column',
-        'creator_id'
+        'creator_id',
+        'order'
     ];
     protected $taskTypes = [
         0 => "To Do",

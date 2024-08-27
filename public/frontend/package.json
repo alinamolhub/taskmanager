@@ -1,17 +1,17 @@
 {
-  "name": "@coreui/coreui-free-react-admin-template",
-  "version": "5.1.0",
-  "description": "CoreUI Free React Admin Template",
+  "name": "@alinamolhub/taskmanage",
+  "version": "0.0",
+  "description": "Task Manager",
   "homepage": ".",
   "bugs": {
     "url": "https://github.com/coreui/coreui-free-react-admin-template/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:coreui/coreui-free-react-admin-template.git"
+    "url": "https://github.com/alinamolhub/taskmanager.git"
   },
   "license": "MIT",
-  "author": "The CoreUI Team (https://github.com/orgs/coreui/people)",
+  "author": "Alina Molchanova",
   "scripts": {
     "build": "vite build",
     "lint": "eslint \"src/**/*.js\"",

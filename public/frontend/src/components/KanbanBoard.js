@@ -94,9 +94,9 @@ const KanbanColumn = memo(({ column, items }) => {
   dropRef(ref); 
   let renderItems = [...items];
   if(loading){
-      if(loading.droppedOnIndex > 0)
+     /* if(loading.droppedOnIndex > 0)
       renderItems = [...renderItems.slice(0,loading.droppedOnIndex+1),loading.item,...renderItems.slice(loading.droppedOnIndex+1)];
-    else
+    else*/
     renderItems = [...items,loading.item];
   }
     
@@ -105,7 +105,7 @@ const KanbanColumn = memo(({ column, items }) => {
     {renderItems.map((item, index) => { const key =item.newKey?uuidv4():item.id;  return <KanbanElement index={index} key={key} kitem={item} />})}
   </CCol>
 });
-const KanbanGroup = memo(({ group,groupFilter }) => {
+const KanbanGroup = ({ group,groupFilter }) => {
   const { ds, groupName, cols, columnField } = useContext(KanbanContext);
   const getColIitems = (colId, group) => {
 
@@ -128,7 +128,7 @@ const KanbanGroup = memo(({ group,groupFilter }) => {
     </>;
   else
     return <></>;
-})
+}
 
 const KanbanBoard = memo(({ groupsList = [], groupFilter =()=>true, groupName=()=>"", dragedIf, onReplace, columnField, cols, cardContent, data, setData}) => {
   return (

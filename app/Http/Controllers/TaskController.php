@@ -31,13 +31,16 @@ class TaskController extends Controller
     }
     public function update(Request $request,Projects $project,Tasks $task){
         //DB::enableQueryLog(); 
-  
+   
 
         $task->update($request->input());
+        if( $request->has("column")){
+            $task->update(["column" => $request->input("column")]);
+        }
         if( $request->has("user_id")){
             $task->assignTo($request->input("user_id"));
         }
-        if($task->assignTo(auth()->user()->id)){
+        if($task->isUserAssigned(auth()->user()->id)){
             if( $request->has("timer_start")){
                 $task->timerInfo()->insert(["tasks_id"=>$task->id, "user_id" =>auth()->user()->id,"time_start" => now()]);
             }

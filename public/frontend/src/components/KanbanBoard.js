@@ -8,7 +8,7 @@ import {
   CCardHeader,
   CCol
 } from '@coreui/react'
-import { Task } from '../views/Tasks/components/Task'
+
 import { v4 as uuidv4 } from 'uuid';
 
 const KanbanContext = React.createContext();

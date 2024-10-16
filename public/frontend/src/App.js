@@ -1,6 +1,6 @@
 import React, { Suspense, useState } from 'react'
 import { Route, Routes,Navigate, Outlet  } from 'react-router-dom'
-/*import { useSelector } from 'react-redux'*/
+
 
 import { CSpinner } from '@coreui/react'
 import './scss/style.scss'

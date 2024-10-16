@@ -29,7 +29,6 @@ const reducer = (state,action)=>{
         return action.collection;
       }
       case "add":{
-        console.log(action.newTask);
         return [...state,action.newTask];
       }
       case "update":{

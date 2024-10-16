@@ -1,6 +1,6 @@
 import React, { Suspense, useState } from 'react'
 import { Route, Routes,Navigate, Outlet  } from 'react-router-dom'
-/*import { useSelector } from 'react-redux'*/
+
 
 import { CSpinner } from '@coreui/react'
 import './scss/style.scss'
@@ -47,11 +47,7 @@ const App = () => {
           </Route>
           <Route exact path="/404" name="Page 404" element={<Page404 />} />
           <Route exact path="/500" name="Page 500" element={<Page500 />} />
-          
-          
-          
         </Routes>
-        
       </Suspense>}
       </>
 

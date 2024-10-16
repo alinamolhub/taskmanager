@@ -8,7 +8,7 @@ import {
   CCardHeader,
   CCol
 } from '@coreui/react'
-import { Task } from '../views/Tasks/components/Task'
+
 import { v4 as uuidv4 } from 'uuid';
 
 const KanbanContext = React.createContext();
@@ -47,7 +47,7 @@ const KanbanElement = ({ kitem, index }) => {
   return (<div ref={ref}>{content}</div>);
 }
 /** */
-const getReplacedDataSet = (item,column,currentDataSet)=>{
+/*const getReplacedDataSet = (item,column,currentDataSet)=>{
   let newData = currentDataSet.map((kitem) => {
     return {...kitem,...{dropped:false,reodered:false}};
   });
@@ -62,7 +62,7 @@ const getReplacedDataSet = (item,column,currentDataSet)=>{
     newData.splice(droppedOnIndex, 0, newData.splice(droppedIndex, 1)[0]);
   }
 
-}
+}*/
 
 const KanbanColumn = memo(({ column, items }) => {
   const { ds, onReplace, setDs } = useContext(KanbanContext);
@@ -72,31 +72,16 @@ const KanbanColumn = memo(({ column, items }) => {
   const [, dropRef] = useDrop({
     accept: "box",
     drop:async (item) => {
-
-      
       if(item.column !==column ){
-
-      setDs({type:"destroy","id":item.id});
-        
-      setLoading({
-        droppedOnIndex:items.findIndex((kitem) => kitem.id === item.droppedOn),
-        item:{...item,...{empty:true,column:column}}
-      });
+      setDs({type:"update","updateTask":{...item,column:column,empty:true}});
       const updateTask = await onReplace(item, column);
-      setLoading(false);
-      setDs({type:"add","newTask":{...updateTask,newKey:true}});
-      
+      setDs({type:"update","updateTask":{...updateTask,newKey:true}});
       }
-      
-
     }
   });
   dropRef(ref); 
   let renderItems = [...items];
   if(loading){
-     /* if(loading.droppedOnIndex > 0)
-      renderItems = [...renderItems.slice(0,loading.droppedOnIndex+1),loading.item,...renderItems.slice(loading.droppedOnIndex+1)];
-    else*/
     renderItems = [...items,loading.item];
   }
     

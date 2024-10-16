@@ -42,6 +42,11 @@ const Login = () => {
                   <CForm>
                     <h1>Login</h1>
                     <p className="text-body-secondary">Sign In to your account</p>
+                    <CAlert color="light">
+                      admin@mail.com/password,
+                      pm@mail.com/password,
+                      dev@mail.net/password
+                    </CAlert>
                     {error && <CRow><CAlert color="danger">{error}</CAlert></CRow>}
                     <CInputGroup className="mb-3">
                       <CInputGroupText>

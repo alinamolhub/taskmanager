@@ -47,11 +47,7 @@ const App = () => {
           </Route>
           <Route exact path="/404" name="Page 404" element={<Page404 />} />
           <Route exact path="/500" name="Page 500" element={<Page500 />} />
-          
-          
-          
         </Routes>
-        
       </Suspense>}
       </>
 

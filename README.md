@@ -1,4 +1,4 @@
-TaskManager
+<h1>TaskManager</h1>
 TaskManager is a web application for managing projects and tasks, built with Laravel and a React frontend. It uses Laravel Sanctum for authentication and CoreUI Admin Template for the user interface.
 
 Key Features:

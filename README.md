@@ -14,16 +14,20 @@
 <ul style="list-style-type: decimal;">
 <li>Install Laravel dependencies:
 <code>composer install</code>
-Set up .env and generate app key:
+Set up .env and generate app key:<br>
 <code>php artisan key:generate</code>
+<br>
 </li>
 <li>Run migrations and seeders:
+<br>
 <code>php artisan migrate --seed</code>
+<br>
 </li>
-<li>Install React dependencies:<code>
+<li>Install React dependencies:<br><code>
 cd public/frontend
 npm install
 npm run build
-    </code>
+</code>
+<br>
 </li>
 <ul>

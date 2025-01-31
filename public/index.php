@@ -1,5 +1,5 @@
 <?php
-
+/* b2 */
 use Illuminate\Contracts\Http\Kernel;
 use Illuminate\Http\Request;
 
